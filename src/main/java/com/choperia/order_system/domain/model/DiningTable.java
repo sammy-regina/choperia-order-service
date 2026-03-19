@@ -1,13 +1,9 @@
 package com.choperia.order_system.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class DiningTable {
 
     @Id
@@ -16,6 +12,9 @@ public class DiningTable {
 
     @Column(unique = true, nullable = false)
     private Integer number;
+
+    @Enumerated(EnumType.STRING)
+    private TableStatus status;
 
     public UUID getId() {
         return id;
@@ -40,9 +39,6 @@ public class DiningTable {
     public void setStatus(TableStatus status) {
         this.status = status;
     }
-
-    @Enumerated(EnumType.STRING)
-    private TableStatus status;
 
     // Método de negócio para ocupar a mesa
     public void occupy() {
