@@ -26,6 +26,18 @@ public class OrderItem {
     private BigDecimal unitPrice;
     private BigDecimal subtotal;
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
     // Lógica de negócio: Calcula o subtotal automaticamente
     public void calculateSubtotal() {
         this.subtotal = this.unitPrice.multiply(new BigDecimal(this.quantity));
