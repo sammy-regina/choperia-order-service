@@ -21,6 +21,10 @@ public class TableService {
         return tableRepository.findAll();
     }
 
+    public java.util.Optional<DiningTable> findByNumber(Integer number) {
+        return tableRepository.findByNumber(number);
+    }
+
     @Transactional
     public void changeTableStatus(Integer tableNumber, TableStatus newStatus) {
         tableRepository.findByNumber(tableNumber)

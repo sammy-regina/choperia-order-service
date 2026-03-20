@@ -1,0 +1,19 @@
+### Criar um novo pedido para a Mesa 5
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "tableNumber": 5,
+  "items": [
+    {
+      "productName": "Chopp Brahma 300ml",
+      "quantity": 2,
+      "unitPrice": 12.50
+    },
+    {
+      "productName": "Espetinho de Picanha",
+      "quantity": 1,
+      "unitPrice": 18.00
+    }
+  ]
+}

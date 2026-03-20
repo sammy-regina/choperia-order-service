@@ -40,6 +40,7 @@ public class DiningTable {
         this.status = status;
     }
 
+
     // Método de negócio para ocupar a mesa
     public void occupy() {
         if (this.status == TableStatus.FREE) {
