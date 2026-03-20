@@ -20,10 +20,9 @@ class TableRepositoryTest {
     @Test
     @DisplayName("Deve persistir uma mesa com sucesso")
     void shouldSaveTable() {
-        DiningTable table = DiningTable.builder()
-                .number(10)
-                .status(TableStatus.FREE)
-                .build();
+        DiningTable table = new DiningTable();
+        table.setNumber(10);
+        table.setStatus(TableStatus.FREE);
 
         DiningTable savedTable = tableRepository.save(table);
 

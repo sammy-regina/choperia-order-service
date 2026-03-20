@@ -1,9 +1,13 @@
 package com.choperia.order_system.domain.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
 public class DiningTable {
 
     @Id
