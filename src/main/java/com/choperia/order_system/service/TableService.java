@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TableService {
@@ -17,11 +18,17 @@ public class TableService {
         this.tableRepository = tableRepository;
     }
 
+    // Método necessário para o OrderService persistir mudanças de estado
+    @Transactional
+    public DiningTable save(DiningTable table) {
+        return tableRepository.save(table);
+    }
+
     public List<DiningTable> listAllTables() {
         return tableRepository.findAll();
     }
 
-    public java.util.Optional<DiningTable> findByNumber(Integer number) {
+    public Optional<DiningTable> findByNumber(Integer number) {
         return tableRepository.findByNumber(number);
     }
 
@@ -30,7 +37,7 @@ public class TableService {
         tableRepository.findByNumber(tableNumber)
                 .ifPresent(table -> {
                     table.setStatus(newStatus);
-                    tableRepository.save(table);
+                    tableRepository.save(table); // Aqui usamos o repositório diretamente ou o método save acima
                 });
     }
 }

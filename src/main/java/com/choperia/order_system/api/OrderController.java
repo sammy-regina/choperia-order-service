@@ -5,7 +5,6 @@ import com.choperia.order_system.domain.model.Order;
 import com.choperia.order_system.domain.model.OrderItem;
 import com.choperia.order_system.service.OrderService;
 import com.choperia.order_system.service.TableService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +25,11 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody OrderRequest request) {
-        // Buscamos a mesa correspondente
+        // 1. Lógica de entrada: Busca a mesa ou lança IllegalArgumentException (404)
         var table = tableService.findByNumber(request.tableNumber())
-                .orElseThrow(() -> new RuntimeException("Mesa não encontrada"));
+                .orElseThrow(() -> new IllegalArgumentException("Mesa " + request.tableNumber() + " não encontrada"));
 
-        // Convertemos o DTO para Entidade (Mapeamento manual para aprender o fluxo)
+        // 2. Mapeamento manual: DTO -> Entity
         Order order = new Order();
         order.setTable(table);
 
@@ -44,7 +43,7 @@ public class OrderController {
 
         order.setItems(items);
 
-        // Salvamos através do Service (que possui a @Transactional)
+        // 3. Execução: O Service valida e lança IllegalStateException (409) se ocupada
         Order savedOrder = orderService.createOrder(order);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
