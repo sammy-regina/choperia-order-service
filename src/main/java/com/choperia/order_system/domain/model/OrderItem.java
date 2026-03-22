@@ -2,16 +2,11 @@ package com.choperia.order_system.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "order_items")
 public class OrderItem {
 
     @Id
@@ -25,16 +20,38 @@ public class OrderItem {
 
     private String productName;
     private Integer quantity;
+
+    @Column(precision = 19, scale = 2)
     private BigDecimal unitPrice;
+
+    @Column(precision = 19, scale = 2)
     private BigDecimal subtotal;
 
-    public void setOrder(Order order) {
-        this.order = order;
+    // --- Construtores ---
+
+    public OrderItem() {
     }
 
-    public BigDecimal getSubtotal() {
-        return subtotal;
+    public OrderItem(UUID id, Order order, String productName, Integer quantity, BigDecimal unitPrice) {
+        this.id = id;
+        this.order = order;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        calculateSubtotal(); // Garante o cálculo na criação via construtor
     }
+
+    // --- Lógica de Negócio Interna ---
+
+    public void calculateSubtotal() {
+        if (this.unitPrice != null && this.quantity != null) {
+            this.subtotal = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+        } else {
+            this.subtotal = BigDecimal.ZERO;
+        }
+    }
+
+    // --- Getters e Setters Manuais ---
 
     public UUID getId() {
         return id;
@@ -46,6 +63,10 @@ public class OrderItem {
 
     public Order getOrder() {
         return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public String getProductName() {
@@ -70,14 +91,14 @@ public class OrderItem {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+        calculateSubtotal(); // Recalcula se o preço mudar
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
     }
 
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
-    }
-
-    // Lógica de negócio: Calcula o subtotal automaticamente
-    public void calculateSubtotal() {
-        this.subtotal = this.unitPrice.multiply(new BigDecimal(this.quantity));
     }
 }

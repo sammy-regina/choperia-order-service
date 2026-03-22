@@ -1,5 +1,6 @@
 package com.choperia.order_system.api;
 
+import com.choperia.order_system.api.dto.BillResponseDTO;
 import com.choperia.order_system.api.dto.OrderRequest;
 import com.choperia.order_system.domain.model.Order;
 import com.choperia.order_system.domain.model.OrderItem;
@@ -47,5 +48,11 @@ public class OrderController {
         Order savedOrder = orderService.createOrder(order);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
+    }
+
+    @GetMapping("/bill/{tableNumber}")
+    public ResponseEntity<BillResponseDTO> getBill(@PathVariable Integer tableNumber) {
+        BillResponseDTO bill = orderService.calculateBill(tableNumber);
+        return ResponseEntity.ok(bill);
     }
 }

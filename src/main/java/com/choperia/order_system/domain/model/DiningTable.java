@@ -1,13 +1,10 @@
 package com.choperia.order_system.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
+@Table(name = "dining_tables")
 public class DiningTable {
 
     @Id
@@ -18,7 +15,35 @@ public class DiningTable {
     private Integer number;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TableStatus status;
+
+    // --- Construtores ---
+
+    public DiningTable() {
+        // Garantimos que toda mesa nova nasça LIVRE por padrão
+        this.status = TableStatus.FREE;
+    }
+
+    public DiningTable(Integer number, TableStatus status) {
+        this.number = number;
+        this.status = status;
+    }
+
+    // --- Métodos de Domínio (Business Logic) ---
+
+    public void occupy() {
+        if (this.status == TableStatus.OCCUPIED) {
+            throw new IllegalStateException("Conflito: A mesa " + this.number + " já está ocupada!");
+        }
+        this.status = TableStatus.OCCUPIED;
+    }
+
+    public void release() {
+        this.status = TableStatus.FREE;
+    }
+
+    // --- Getters e Setters Manuais ---
 
     public UUID getId() {
         return id;
@@ -42,13 +67,5 @@ public class DiningTable {
 
     public void setStatus(TableStatus status) {
         this.status = status;
-    }
-
-
-    // Método de negócio para ocupar a mesa
-    public void occupy() {
-        if (this.status == TableStatus.FREE) {
-            this.status = TableStatus.OCCUPIED;
-        }
     }
 }
